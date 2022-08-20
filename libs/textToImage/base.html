@@ -50,13 +50,15 @@
 
 	.box {
 		background-color: rgb(255, 255, 255);
-		--box-width: 850px;
+		--box-width: 900px;
 		width: var(--box-width);
+		max-width: var(--box-width);
 		max-height: 800px;
 		padding-bottom: 10px;
 
 		border-radius: 50px;
 
+		text-overflow: clip;
 		/* shadow
 		box-shadow: 10px 10px 50px -10px rgba(120,120,120,0.5);
 		*/

@@ -1,5 +1,4 @@
 import logging
-from pathlib import Path
 import time
 import sys
 
@@ -28,14 +27,16 @@ generatedVideosList = []
 for currentPost in posts:
     currentPost['subIconUrl'] = subIconUrl
 
+    postFilename = f'{currentPost["id"]}_{time.strftime("%d-%m-%Y")}.mp4'
+
     genImgFromPost(currentPost, tmp_dir / "overlay.png")
 
     genVoiceover(currentPost['title'], tmp_dir / "voiceover.mp3")
 
     genVideoFromPost(in_dir / "input.mp4", tmp_dir / "overlay.png",
-                     tmp_dir / "voiceover.mp3", tmp_dir / str(currentPost['id'] + "_final.mp4"))
+                     tmp_dir / "voiceover.mp3", tmp_dir / postFilename)
 
-    generatedVideosList.append(str(currentPost['id'] + "_final.mp4"))
+    generatedVideosList.append(postFilename)
 
     end = time.time()
 

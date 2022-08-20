@@ -6,7 +6,7 @@ import subprocess
 
 import ffmpeg
 
-from options import tmp_dir
+from options import tmp_dir, isVideoAlreadyBlurred
 
 logger = logging.getLogger(__name__)
 
@@ -48,17 +48,29 @@ def genVideoFromPost(bgVideo_path: Path, overlayImage_path: Path, audio: Path, o
         logger.debug("Image coords: %d %d", x, y)
 
         # overlay image
-        logger.info("Current step: blur and overlay")
-        out, err = (ffmpeg
-                    .input(str(bgVideo_path))
-                    .trim(start=start, end=start + audio_duration)
-                    .setpts("PTS-STARTPTS")
-                    .filter("boxblur", 10)
-                    .overlay(overlay_file, x=x, y=y)
-                    .output(str(tmp_dir / "blur_overlay_tmp.mp4"))
-                    .overwrite_output()
-                    .run(capture_stdout=True, capture_stderr=True)
-                    )
+        if not isVideoAlreadyBlurred:
+            logger.info("Current step: blur and overlay")
+            out, err = (ffmpeg
+                        .input(str(bgVideo_path))
+                        .trim(start=start, end=start + audio_duration)
+                        .setpts("PTS-STARTPTS")
+                        .filter("boxblur", 10)
+                        .overlay(overlay_file, x=x, y=y)
+                        .output(str(tmp_dir / "blur_overlay_tmp.mp4"))
+                        .overwrite_output()
+                        .run(capture_stdout=True, capture_stderr=True)
+                        )
+        else:
+            logger.info("Current step: overlay")
+            out, err = (ffmpeg
+                        .input(str(bgVideo_path))
+                        .trim(start=start, end=start + audio_duration)
+                        .setpts("PTS-STARTPTS")
+                        .overlay(overlay_file, x=x, y=y)
+                        .output(str(tmp_dir / "blur_overlay_tmp.mp4"))
+                        .overwrite_output()
+                        .run(capture_stdout=True, capture_stderr=True)
+                        )
 
         # add audio
         logger.info("Current step: add voiceover")

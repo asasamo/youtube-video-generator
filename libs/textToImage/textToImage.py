@@ -86,7 +86,7 @@ def genImgFromPost(post: dict, outPath: Path):
 
     # needs wkhtmltoimage 0.12.6 (with patched qt)
     imgkit.from_string(generateHTML(post['subName'], post['subIconUrl'],
-                       post['title']), outPath, options={'log-level': 'none', 'transparent': ''})
+                       post['title']), outPath, options={'log-level': 'none', 'transparent': '', 'width': '850'})
 
     logger.info("Done generating overlay image!")
     return
