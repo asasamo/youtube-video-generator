@@ -2,4 +2,3 @@ imgkit
 requests
 gTTS
 ffmpeg-python
-wand

@@ -1,12 +1,14 @@
 import requests
 import logging
 
+from post import Post
+
 from options import headers
 
 logger = logging.getLogger(__name__)
 
 
-def request(subName: str, n: int):
+def request(subName: str, n: int) -> list:
     logger.info('Getting %d posts from r/%s...', n, subName)
 
     # url builder
@@ -18,13 +20,9 @@ def request(subName: str, n: int):
     ret = []  # return
 
     for post in response.json()['data']['children'][0:n]:  # json filter
-        # ret.append('https://www.reddit.com' + post['data']['permalink']) # old
-        ret.append({
-            'title': post['data']['title'],
-            'id': post['data']['id'],
-            'link': 'https://www.reddit.com' + post['data']['permalink'],
-            'subName': post['data']['subreddit_name_prefixed']
-        })
+
+        ret.append(Post(post['data']['id'], post['data']['title'], 'https://www.reddit.com' +
+                   post['data']['permalink'], post['data']['subreddit_name_prefixed']))
 
     logger.info('Done getting posts!')
     return ret  # return array with posts

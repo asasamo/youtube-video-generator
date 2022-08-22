@@ -3,6 +3,9 @@ import json
 import imgkit
 import requests
 from pathlib import Path
+
+from post import Post
+
 from options import headers
 
 import logging
@@ -19,7 +22,7 @@ def loadJsonFromFile(filename):
         return json.loads(content)
 
 
-def getSubIcon(subName):
+def getSubIcon(subName) -> str:
     logger.info("Getting sub icon...")
     r = requests.get(
         f'https://reddit.com/r/{subName.strip().lower()}/about.json', headers=headers)
@@ -64,32 +67,14 @@ def generateHTML(subName, subIconURL, postTitle):
     return baseHTML
 
 
-def genImgFromPostUrl(postUrl: str, outPath: Path):
-    logger.info("Generating overlay image from post...")
-
-    subName = re.search(
-        r"https:\/\/www.reddit.com\/r\/([\w\d]+)\/.+", postUrl).group(1)
-
-    subIconURL = getSubIcon(subName=subName)
-
-    postTitle, postId = getPostTitle(postUrl)
-
-    imgkit.from_string(generateHTML(subName, subIconURL,
-                       postTitle), outPath, options={'crop-w': '850', 'log-level': 'none'})
-
-    logger.info("Done generating overlay image!")
-    return (postTitle, postId)
-
-
-def genImgFromPost(post: dict, outPath: Path):
+def genImgFromPost(post: Post):
     logger.info("Generating overlay image from post...")
 
     # needs wkhtmltoimage 0.12.6 (with patched qt)
-    imgkit.from_string(generateHTML(post['subName'], post['subIconUrl'],
-                       post['title']), outPath, options={'log-level': 'none', 'transparent': '', 'width': '900'})
+    imgkit.from_string(generateHTML(post.subName, post.subIconUrl,
+                       post.title), post.overlayPath, options={'log-level': 'none', 'transparent': '', 'width': '900'})
 
     logger.info("Done generating overlay image!")
-    return
 
 
 if __name__ == "__main__":

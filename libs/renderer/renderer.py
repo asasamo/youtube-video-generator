@@ -1,12 +1,12 @@
 import logging
 import math
+import subprocess
 from pathlib import Path
 from random import randrange
-import subprocess
 
 import ffmpeg
-
-from options import tmp_dir, isVideoAlreadyBlurred
+from options import inputVideo, isVideoAlreadyBlurred, tmp_dir, tmpVideo
+from post import Post
 
 logger = logging.getLogger(__name__)
 
@@ -29,56 +29,56 @@ def getFramerate(filename):
     return math.ceil(fraction[0]/fraction[1])
 
 
-def genVideoFromPost(bgVideo_path: Path, overlayImage_path: Path, audio: Path, output: Path):
+def genVideoFromPost(post: Post, outPath: Path):
     logger.info("Generating video...")
 
     try:
-        video_duration = getDuration(str(bgVideo_path))
-        video_width, video_height = getDimensions(str(bgVideo_path))
+        video_duration = getDuration(str(inputVideo))
+        video_width, video_height = getDimensions(str(inputVideo))
 
-        overlay_file = ffmpeg.input(str(overlayImage_path))
-        overlay_width, overlay_height = getDimensions(str(overlayImage_path))
+        overlay_file = ffmpeg.input(str(post.overlayPath))
+        overlay_width, overlay_height = getDimensions(str(post.overlayPath))
 
-        audio_duration = getDuration(str(audio)) + PADDING*2
+        audio_duration = getDuration(str(post.voiceoverPath)) + PADDING*2
         start = randrange(0 + PADDING, video_duration - audio_duration)
 
         # centered image coords
-        x = int(video_width/2) - int(overlay_width / 2)
-        y = int(video_height/2) - int(overlay_height / 2)
+        x = int(video_width / 2) - int(overlay_width / 2)
+        y = int(video_height / 2) - int(overlay_height / 2)
         logger.debug("Image coords: %d %d", x, y)
 
         # overlay image
         if not isVideoAlreadyBlurred:
             logger.info("Current step: blur and overlay")
             out, err = (ffmpeg
-                        .input(str(bgVideo_path))
+                        .input(str(inputVideo))
                         .trim(start=start, end=start + audio_duration)
                         .setpts("PTS-STARTPTS")
                         .filter("boxblur", 10)
                         .overlay(overlay_file, x=x, y=y)
-                        .output(str(tmp_dir / "blur_overlay_tmp.mp4"))
+                        .output(str(tmpVideo))
                         .overwrite_output()
                         .run(capture_stdout=True, capture_stderr=True)
                         )
         else:
             logger.info("Current step: overlay")
             out, err = (ffmpeg
-                        .input(str(bgVideo_path))
+                        .input(str(inputVideo))
                         .trim(start=start, end=start + audio_duration)
                         .setpts("PTS-STARTPTS")
                         .overlay(overlay_file, x=x, y=y)
-                        .output(str(tmp_dir / "blur_overlay_tmp.mp4"))
+                        .output(str(tmpVideo))
                         .overwrite_output()
                         .run(capture_stdout=True, capture_stderr=True)
                         )
 
         # add audio
         logger.info("Current step: add voiceover")
-        tmp = ffmpeg.input(str(tmp_dir / "blur_overlay_tmp.mp4"))
+        tmp = ffmpeg.input(str(tmpVideo))
         out, err = (
             ffmpeg
-            .input(str(audio))
-            .output(tmp.video, str(output), shortest=None, vcodec='copy')
+            .input(str(post.voiceoverPath))
+            .output(tmp.video, str(outPath), shortest=None, vcodec='copy')
             .overwrite_output()
             .run(capture_stdout=True, capture_stderr=True)
         )

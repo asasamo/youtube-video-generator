@@ -1,1 +1,1 @@
-wkhtmltopdf
+wkhtmltoimage 0.12.6 (with patched qt)
