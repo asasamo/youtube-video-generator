@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  video-generator:
+    build:
+      context: ./
+        #dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    container_name: video-generator
+    volumes:
+      - ./input:/usr/src/app/input
+      - ./out:/usr/src/app/out
+    environment:
+      - TZ=Europe/Rome
+    restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"

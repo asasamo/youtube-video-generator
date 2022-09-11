@@ -2,4 +2,4 @@ imgkit
 requests
 gTTS
 ffmpeg-python
-wand
+# python-telegram-bot
