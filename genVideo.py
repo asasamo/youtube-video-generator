@@ -6,7 +6,7 @@ import os
 import string
 import random
 
-from libs.renderer.renderer import genVideoFromPost, concatVideos, addBackgroundMusic
+from libs.renderer.renderer import genVideoFromPost, concatVideos, addBackgroundMusic, getDuration
 from libs.textToImage.textToImage import getSubIcon, genImgFromPost
 from libs.apiRequest.request import request as api
 from libs.textToSpeech.textToSpeech import genVoiceover
@@ -30,7 +30,7 @@ def clearOldFiles(path: Path):
     logger.info('Done clearing!')
 
 
-def generateVideo(subName: str, postNumber: int) -> tuple:
+def generateVideo(subName: str, postNumber: int):
     start = time.time()
 
     logger.info('Generating new video!')
@@ -38,6 +38,9 @@ def generateVideo(subName: str, postNumber: int) -> tuple:
     clearOldFiles(tmp_dir)
 
     posts = api(subName, postNumber)
+    # sort from shortest to longest title
+    posts.sort(key=lambda p: len(p.title))
+
     subIconUrl = getSubIcon(subName)
 
     generatedVideosList = []
@@ -72,7 +75,8 @@ def generateVideo(subName: str, postNumber: int) -> tuple:
 
     logger.info('Finished in %d seconds.', end - start)
 
-    return (int(end - start), out_dir / finalVideoFileName if postNumber != 1 else out_dir / generatedVideosList[0])
+    # video duration, gen time, path
+    return (getDuration(out_dir / finalVideoFileName if postNumber != 1 else out_dir / generatedVideosList[0]), int(end - start), out_dir / finalVideoFileName if postNumber != 1 else out_dir / generatedVideosList[0])
 
 
 if __name__ == "__main__":

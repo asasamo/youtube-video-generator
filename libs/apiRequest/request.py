@@ -3,7 +3,7 @@ import logging
 
 from post import Post
 
-from options import headers
+from options import headers, videoSchedule
 
 logger = logging.getLogger(__name__)
 
@@ -12,7 +12,7 @@ def request(subName: str, n: int) -> list:
     logger.info('Getting %d posts from r/%s...', n, subName)
 
     # url builder
-    url = f'https://www.reddit.com/r/{subName.strip().lower()}/top.json?t=week'
+    url = f'https://www.reddit.com/r/{subName.strip().lower()}/top.json?t={videoSchedule}'
 
     # request
     response = requests.get(url, headers=headers)
