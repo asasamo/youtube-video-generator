@@ -12,7 +12,8 @@ class Post:
     def __init__(self, id: str, title: str, link: str, subName: str, subIconUrl: str = '') -> None:
         self.id = id
         self.title = title
-        self.link = link
+        self.link = link if link[len(
+            link) - 1] != '/' else link[:len(link) - 2]
         self.subName = subName
         self.subIconUrl = subIconUrl
 

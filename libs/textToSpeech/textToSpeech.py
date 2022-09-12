@@ -1,7 +1,7 @@
 from gtts import gTTS
 import logging
 
-from post import Post
+from classes.post import Post
 
 logger = logging.getLogger(__name__)
 

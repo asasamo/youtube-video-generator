@@ -8,10 +8,11 @@ import random
 
 from libs.renderer.renderer import genVideoFromPost, concatVideos, addBackgroundMusic, getDuration
 from libs.textToImage.textToImage import getSubIcon, genImgFromPost
-from libs.apiRequest.request import request as api
+from libs.apiRequest.request import requestPosts as api
+from libs.apiRequest.request import requestComments
 from libs.textToSpeech.textToSpeech import genVoiceover
 
-from post import Post
+from classes.post import Post
 
 from options import tmp_dir, out_dir, in_dir
 

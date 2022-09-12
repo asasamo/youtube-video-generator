@@ -1,14 +1,15 @@
+from options import headers, videoSchedule
 import requests
 import logging
 
-from post import Post
+from classes.post import Post
+from classes.comment import Comment
 
-from options import headers, videoSchedule
 
 logger = logging.getLogger(__name__)
 
 
-def request(subName: str, n: int) -> list:
+def requestPosts(subName: str, n: int) -> tuple:
     logger.info('Getting %d posts from r/%s...', n, subName)
 
     # url builder
@@ -28,6 +29,27 @@ def request(subName: str, n: int) -> list:
     return ret  # return array with posts
 
 
+def requestComments(post: Post, n: int, sort: str = 'top') -> list:
+    logger.info('Getting %d comments from post %s...', n, post.id)
+
+    # url builder
+    url = f'https://www.reddit.com/{post.link}.json?sort={sort}'
+
+    # request
+    response = requests.get(url, headers=headers)
+
+    ret = []  # return
+
+    # filter comments from moderators
+    for comment in list(filter(lambda c: c['data']['distinguished'] != 'moderator', response.json()[1]['data']['children']))[0:n]:
+
+        ret.append(Comment(comment['data']['id'], comment['data']['author'], comment['data']['body'], 'https://www.reddit.com' +
+                   comment['data']['permalink'], comment['data']['subreddit_name_prefixed']))
+
+    logger.info('Done getting comments!')
+    return ret  # return array with posts
+
+
 if __name__ == '__main__':
     #request('subreddit name', 'number of links returned')
-    print(request('Showerthoughts', 3))
+    pass
