@@ -23,16 +23,18 @@ async def genVideo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Generating video from r/{context.args[0]} with {int(context.args[1])} posts...")
-    duration, seconds, filename = generateVideo(
-        context.args[0], int(context.args[1]))
+    # duration, seconds, filename = generateVideo(
+    #     context.args[0], int(context.args[1]))
 
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Finished in {seconds} seconds!\nSending video ({duration}s, {round(float(os.path.getsize(filename) / 1024 / 1024), 2)} MBytes)...")
+    print(generateVideo(context.args[0], int(context.args[1])))
 
-    logging.info("Uploading file")
-    await context.bot.send_video(chat_id=update.effective_chat.id, video=open(filename, 'rb'),
-                                 connect_timeout=10000, pool_timeout=10000, read_timeout=10000, write_timeout=10000)
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Caption for instagram:")
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Top {int(context.args[1])} posts from r/{context.args[0][0].upper() + context.args[0][1:]}!")
+    # await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Finished in {seconds} seconds!\nSending video ({duration}s, {round(float(os.path.getsize(filename) / 1024 / 1024), 2)} MBytes)...")
+
+    # logging.info("Uploading file")
+    # await context.bot.send_video(chat_id=update.effective_chat.id, video=open(filename, 'rb'),
+    #                              connect_timeout=10000, pool_timeout=10000, read_timeout=10000, write_timeout=10000)
+    # await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Caption for instagram:")
+    # await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Top {int(context.args[1])} posts from r/{context.args[0][0].upper() + context.args[0][1:]}!")
     logging.info("Done uploading!")
 
 

@@ -18,3 +18,5 @@ videoSchedule = 'day'  # day, week, month, year, alltime
 
 # input video already blurred? - not time saving
 isVideoAlreadyBlurred = False
+
+SPEECH_REGION = 'northeurope'
