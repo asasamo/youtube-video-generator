@@ -4,7 +4,7 @@ import imgkit
 import requests
 from pathlib import Path
 
-from post import Post
+from classes.post import Post
 
 from options import headers
 
@@ -50,11 +50,11 @@ def getPostTitle(postUrl):
     return (jsonResponse[0]["data"]["children"][0]["data"]["title"], jsonResponse[0]["data"]["children"][0]["data"]["id"])
 
 
-def generateHTML(subName, subIconURL, postTitle):
+def generatePostHTML(subName, subIconURL, postTitle):
     logger.info("Generating HTML...")
     # load base HTML file
     baseHTML = ""
-    with open(Path(__file__).parent / "base.html", "r") as f:
+    with open(Path(__file__).parent / "base_post.html", "r") as f:
         baseHTML = f.read()
         f.close()
 
@@ -71,13 +71,13 @@ def genImgFromPost(post: Post):
     logger.info("Generating overlay image from post...")
 
     # needs wkhtmltoimage 0.12.6 (with patched qt)
-    imgkit.from_string(generateHTML(post.subName, post.subIconUrl,
+    imgkit.from_string(generatePostHTML(post.subName, post.subIconUrl,
                        post.title), post.overlayPath, options={'log-level': 'none', 'transparent': '', 'width': '900'})
 
     logger.info("Done generating overlay image!")
 
 
 if __name__ == "__main__":
-    imgkit.from_string(generateHTML("r/sos", "",
+    imgkit.from_string(generatePostHTML("r/sos", "",
                        "TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE TITLE "), "out.png",
                        options={'log-level': 'none', 'transparent': ''})

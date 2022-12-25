@@ -6,7 +6,7 @@ from random import randrange
 
 import ffmpeg
 from options import inputVideo, isVideoAlreadyBlurred, tmp_dir, tmpVideo
-from post import Post
+from classes.post import Post
 
 logger = logging.getLogger(__name__)
 
