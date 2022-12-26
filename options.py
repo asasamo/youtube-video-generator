@@ -20,3 +20,4 @@ videoSchedule = 'day'  # day, week, month, year, alltime
 isVideoAlreadyBlurred = False
 
 SPEECH_REGION = 'northeurope'
+VOICE = 'en-US-DavisNeural'
