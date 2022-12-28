@@ -24,7 +24,8 @@ def genVoiceover(post: Post):
               {post.title}
               </voice></speak>"""
 
-    r = requests.post(url, headers=headers, data=data)
+    r = requests.post(url, headers=headers,
+                      data=data.encode('utf-8', 'ignore'))
 
     with open(post.voiceoverPath, 'wb') as audioOut:
         audioOut.write(r.content)
