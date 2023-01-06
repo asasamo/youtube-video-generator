@@ -4,7 +4,7 @@ services:
   video-generator:
     build:
       context: ./
-        #dockerfile: ./Dockerfile
+      #dockerfile: ./Dockerfile
     env_file:
       - .env
     container_name: video-generator
@@ -16,3 +16,7 @@ services:
     restart: unless-stopped
     labels:
       com.centurylinklabs.watchtower.enable: "false"
+    # for hw acceleration
+    # devices:
+    #   - /dev/dri/renderD128:/dev/dri/renderD128
+    #   - /dev/dri/card0:/dev/dri/card0
