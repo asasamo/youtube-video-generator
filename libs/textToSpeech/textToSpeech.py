@@ -2,7 +2,7 @@ import os
 import logging
 import requests
 
-from options import SPEECH_REGION
+from options import SPEECH_REGION, VOICE
 
 from classes.post import Post
 
@@ -16,15 +16,16 @@ def genVoiceover(post: Post):
 
     headers = {'Ocp-Apim-Subscription-Key': os.getenv('SPEECH_KEY'),
                'Content-Type': 'application/ssml+xml',
-               'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3',
+               'X-Microsoft-OutputFormat': 'audio-24khz-160kbitrate-mono-mp3',
                'User-Agent': 'curl'}
 
     data = f"""<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Male'
-              name='en-US-DavisNeural'>
+              name='{VOICE}'>
               {post.title}
               </voice></speak>"""
 
-    r = requests.post(url, headers=headers, data=data)
+    r = requests.post(url, headers=headers,
+                      data=data.encode('utf-8', 'ignore'))
 
     with open(post.voiceoverPath, 'wb') as audioOut:
         audioOut.write(r.content)
