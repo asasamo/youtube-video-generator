@@ -4,3 +4,4 @@ __pycache__
 tmp_dir/*
 input/*
 out/*
+.env

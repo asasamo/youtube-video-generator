@@ -9,7 +9,6 @@ import random
 from libs.renderer.renderer import genVideoFromPost, concatVideos, addBackgroundMusic, getDuration
 from libs.textToImage.textToImage import getSubIcon, genImgFromPost
 from libs.apiRequest.request import requestPosts as api
-from libs.apiRequest.request import requestComments
 from libs.textToSpeech.textToSpeech import genVoiceover
 
 from classes.post import Post
@@ -21,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 def genRandomString(length):
     str = string.ascii_lowercase
-    return ''.join(random.choice(str) for i in range(length))
+    return ''.join(random.choice(str) for _ in range(length))
 
 
 def clearOldFiles(path: Path):
