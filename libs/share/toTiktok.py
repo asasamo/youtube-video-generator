@@ -2,7 +2,7 @@ import logging
 import os
 from pathlib import Path
 
-from tiktok.tiktok import upload
+from tiktok.upload import upload
 
 logger = logging.getLogger(__name__)
 
