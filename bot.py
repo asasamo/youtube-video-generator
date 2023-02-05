@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
 
 from genVideo import generateVideo
-from libs.share.tiktok import toTiktok
+from libs.share.toTiktok import toTiktok
 
 logging.basicConfig(level=logging.INFO,
                     format="[%(asctime)s] [%(levelname)s] [%(funcName)s] - %(message)s")
@@ -47,7 +47,7 @@ async def tiktok(update: Update, context: ContextTypes.DEFAULT_TYPE):
     duration, seconds, filename = generateVideo(
         context.args[0], int(context.args[1]))
 
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Finished in {seconds} seconds!\Uploading video ({duration}s, {round(float(os.path.getsize(filename) / 1024 / 1024), 2)} MBytes) to Tiktok...")
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=rf"Finished in {seconds} seconds!\Uploading video ({duration}s, {round(float(os.path.getsize(filename) / 1024 / 1024), 2)} MBytes) to Tiktok...")
 
     logging.info("Uploading file to Tiktok")
     toTiktok(filename)
