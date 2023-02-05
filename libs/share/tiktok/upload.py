@@ -3,7 +3,8 @@ import os
 from pathlib import Path
 
 import requests
-from tiktokToken import Token
+
+from libs.share.tiktok.tiktokToken import Token
 
 logger = logging.getLogger(__name__)
 

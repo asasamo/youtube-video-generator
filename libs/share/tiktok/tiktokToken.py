@@ -3,7 +3,7 @@ import os
 
 import requests
 
-from ....options import tmp_dir
+from options import tmp_dir
 
 logger = logging.getLogger(__name__)
 
