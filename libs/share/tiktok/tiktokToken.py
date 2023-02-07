@@ -50,9 +50,9 @@ class Token:
                             })
 
         # Check if request failed
-        if res.json()['data']['error']['code'] != 'ok':
+        if res.json()['data']['error_code'] != 0:
             logger.error(
-                f"Request failed with error code {res.json()['data']['error']['code']}: {res.json()['data']['error']['message']}")
+                f"Request failed with error code {res.json()['data']['error_code']}: {res.json()['data']['description']}")
             exit(1)
 
         # Save new refresh token
