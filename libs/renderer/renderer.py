@@ -48,7 +48,7 @@ def genVideoFromPost(post: Post, outPath: Path):
         logger.debug("Image coords: %d %d", x, y)
 
         # hwaccel
-        # ffmpeg -vaapi_device /dev/dri/renderD128 -vf 'format=nv12,hwupload' -c:v hevc_vaapi -f mp4 -rc_mode 1 -qp 25 -i input.mp4 output.mp4
+        # sudo ffmpeg -vaapi_device /dev/dri/renderD128 -i input.mp4 -vf 'format=nv12,hwupload' -c:v hevc_vaapi -f mp4 -rc_mode 1 -qp 25 output.mp4
         # overlay image
         if not isVideoAlreadyBlurred:
             logger.info("Current step: blur and overlay")

@@ -63,9 +63,10 @@ if __name__ == '__main__':
 
     start_handler = CommandHandler('start', start)
     genVideo_handler = CommandHandler('genVideo', genVideo)
-    genVideo_handler = CommandHandler('tiktok', tiktok)
+    tiktok_handler = CommandHandler('tiktok', tiktok)
 
     application.add_handler(start_handler)
     application.add_handler(genVideo_handler)
+    application.add_handler(tiktok_handler)
 
     application.run_polling()
